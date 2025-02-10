@@ -1,0 +1,13 @@
+{
+    "title": "Vue Front-End Developer",
+    "type": "Part-Time",
+    "description": "Join our team as a Part-Time Front-End Developer.",
+    "location": "Pheonix, AZ",
+    "salary": "$60K - $70K",
+    "company": {
+      "name": "Alpha Elite",
+      "description": "A startup specializing in digital marketing.",
+      "contactEmail": "contact@alphaelite.com",
+      "contactPhone": "555-555-5555"
+    }
+  }
