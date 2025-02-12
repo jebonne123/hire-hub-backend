@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Job, JobDocument } from './schemas/jobs.schema';
 import { CreateJobDto } from './schemas/dto/create-jobs.dto';
 import { UpdateJobDto } from './schemas/dto/update-jobs.dto';
@@ -18,17 +18,24 @@ export class JobsService {
     
 
     async findAll(): Promise<Job[]> {
-        return this.jobModel.find().exec();
+        const jobs = this.jobModel.find().exec();
+        console.log(jobs);
+        return jobs;
     }
 
     async findOne(id: string): Promise<Job>{
+        if (!Types.ObjectId.isValid(id)) {
+            throw new BadRequestException('Invalid Job ID format');
+          }
+      
         const job = await this.jobModel.findById(id).exec();
         if(!job) throw new NotFoundException(`Job with this ID ${id} not found`);
+        console.log(job);
         return job;
     }
 
     async remove(id: string): Promise<void>{
-        const job = await this.jobModel.findByIdAndDelete(id).exec();
+        await this.jobModel.findByIdAndDelete(id);
     }
 
     async update(id: string, updateJobDto: UpdateJobDto): Promise<Job> {

@@ -14,6 +14,7 @@ export class JobsController {
 
     @Get()
     findAll() {
+        console.log(this.jobsService.findAll());
         return this.jobsService.findAll();
       }
 
@@ -25,5 +26,10 @@ export class JobsController {
     @Patch(':id')
     update(@Param('id') id: string, @Body() updateJobDto: UpdateJobDto) {
         return this.jobsService.update(id, updateJobDto);
+    }
+
+    @Delete(':id')
+    remove(@Param('id') id: string) {
+        return this.jobsService.remove(id);
     }
 }
