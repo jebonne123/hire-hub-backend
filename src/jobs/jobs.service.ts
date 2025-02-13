@@ -10,16 +10,8 @@ import { UpdateJobDto } from './schemas/dto/update-jobs.dto';
 export class JobsService {
     constructor(@InjectModel(Job.name) private jobModel: Model<JobDocument>) {}
 
-    async create(createJobDto: CreateJobDto): Promise<Job> {
-        console.log("Received CreateJobDto:", createJobDto);
-        const newJob = new this.jobModel(createJobDto);
-        return newJob.save();
-    }
-    
-
     async findAll(): Promise<Job[]> {
-        const jobs = this.jobModel.find().exec();
-        console.log(jobs);
+        const jobs = await this.jobModel.find().exec();
         return jobs;
     }
 
@@ -30,8 +22,13 @@ export class JobsService {
       
         const job = await this.jobModel.findById(id).exec();
         if(!job) throw new NotFoundException(`Job with this ID ${id} not found`);
-        console.log(job);
         return job;
+    }
+    
+    async create(createJobDto: CreateJobDto): Promise<Job> {
+        console.log("Received CreateJobDto:", createJobDto);
+        const newJob = await this.jobModel.create(createJobDto);
+        return newJob.save();
     }
 
     async remove(id: string): Promise<void>{

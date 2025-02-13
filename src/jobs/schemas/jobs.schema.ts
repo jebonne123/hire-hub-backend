@@ -3,7 +3,7 @@ import { HydratedDocument } from "mongoose";
 
 export type JobDocument = HydratedDocument<Job>;
 
-@Schema()
+@Schema({ timestamps: true})
 export class Job {
     @Prop({ required: true })
     title:  string;
