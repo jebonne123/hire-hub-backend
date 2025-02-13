@@ -14,8 +14,7 @@ import { AppController } from './app.controller';
     }),
     MongooseModule.forRoot(process.env.MONGO_URI as string),
     JobsModule,
-    AuthModule,
-    UsersModule
+    AuthModule
   ],
   controllers: [AppController]
 })

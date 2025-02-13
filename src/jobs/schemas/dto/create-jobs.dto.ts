@@ -1,5 +1,6 @@
-import { IsEmail, IsNotEmpty, IsString, ValidateNested, IsObject } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, ValidateNested, IsObject, IsEmpty } from 'class-validator';
 import { Type } from 'class-transformer';
+import { User } from 'src/users/schemas/user.schema';
 
 
 export class CompanyDto {
@@ -46,5 +47,9 @@ export class CreateJobDto{
     @IsObject()
     @Type(() => CompanyDto) 
     company: CompanyDto;
+
+    // from job schema 
+    @IsEmpty({ message: "You cannot pass user id"})
+    readonly user: User
 }
 

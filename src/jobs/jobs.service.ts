@@ -4,14 +4,16 @@ import { Model, Types } from 'mongoose';
 import { Job, JobDocument } from './schemas/jobs.schema';
 import { CreateJobDto } from './schemas/dto/create-jobs.dto';
 import { UpdateJobDto } from './schemas/dto/update-jobs.dto';
+import { User } from 'src/users/schemas/user.schema';
 
 
 @Injectable()
 export class JobsService {
     constructor(@InjectModel(Job.name) private jobModel: Model<JobDocument>) {}
 
-    async findAll(): Promise<Job[]> {
-        const jobs = await this.jobModel.find().exec();
+    async findAll(query: any): Promise<Job[]> {
+        
+        const jobs = await this.jobModel.find(query).exec();
         return jobs;
     }
 
@@ -24,11 +26,13 @@ export class JobsService {
         if(!job) throw new NotFoundException(`Job with this ID ${id} not found`);
         return job;
     }
-    
-    async create(createJobDto: CreateJobDto): Promise<Job> {
-        console.log("Received CreateJobDto:", createJobDto);
-        const newJob = await this.jobModel.create(createJobDto);
+    async create(createJobDto: CreateJobDto, user: User): Promise<Job> {
+
+        const data = Object.assign(createJobDto, ({ user: user._id}))
+
+        const newJob = await this.jobModel.create(data);
         return newJob.save();
+
     }
 
     async remove(id: string): Promise<void>{
@@ -36,7 +40,7 @@ export class JobsService {
     }
 
     async update(id: string, updateJobDto: UpdateJobDto): Promise<Job> {
-        const updatedPost = await this.jobModel.findByIdAndUpdate(id, updateJobDto, { new: true }).exec();
+        const updatedPost = await this.jobModel.findByIdAndUpdate(id, updateJobDto, { new: true, runValidators: true }).exec();
         if (!updatedPost) throw new NotFoundException('Post not found for update func');
         return updatedPost;
       }
